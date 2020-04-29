@@ -1,0 +1,17 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="card" style="text-align: center; margin: 100px auto 0 auto; width: 30rem;">
+        <img class="card-img-top" src="{% static 'games/avatars.jpg' %}" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">Guess Pooh?</h5>
+            <p class="card-text">Guess Pooh is a game where you try to guess the answer to questions relating to Kitty & Pooh's WhatsApp chat. You will be given a question and can select from either Kitty or Pooh as the answer.</p>
+            <a href="{% url 'play' %}" class="btn btn-outline-primary btn-primary">Play Now</a>
+        </div>
+    </div>
+    <style>
+        body{
+            background-color: #e0e0e0;
+        }
+    </style>
+{% endblock %}

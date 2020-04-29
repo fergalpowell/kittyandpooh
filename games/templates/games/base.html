@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kitty and Pooh</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="{%  static 'home/resources/jquery.tagcloud.js' %}"></script>
+</head>
+<body>
+
+    <div id="nav" class="navbark" style="text-align: center; background-color: #000051;">
+        <span onclick="openNav()">
+            <label class="hamburger-icon">
+                <span>&nbsp;</span>
+                <span>&nbsp;</span>
+                <span>&nbsp;</span>
+            </label>
+        </span>
+        <img id="kittyandpoohicon" src="../../static/home/images/kittyandpooh.png">
+    </div>
+
+    <div id="mySidenav" class="sidenav" style="background-color: #000051">
+            <a href="javascript:closeNav()" class="closebtn">&times;</a>
+            <a href="/chat">chat&nbsp;chat</a>
+            <a href="/games">play&nbsp;play</a>
+            <a href="javascript:null">pic&nbsp;pic</a>
+            <a href="javascript:null">map&nbsp;map</a>
+        </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            let els = document.getElementsByClassName('content');
+            for(let i = 0; i < els.length; i++){
+                document.getElementById('nav').classList.add("opaque-content");
+                els[i].classList.add("opaque-content");
+            }
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            let els = document.getElementsByClassName('content');
+            for(let i = 0; i < els.length; i++){
+                document.getElementById('nav').classList.remove("opaque-content");
+                els[i].classList.remove("opaque-content");
+            }
+        }
+    </script>
+
+    <style>
+        .hamburger-icon {
+            cursor: pointer;
+            margin: 15px 0 0 0;
+            padding: 10px 10px;
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .hamburger-icon span {
+            width: 30px;
+            background-color: #FFFFFF;
+            height: 4px;
+            display: block;
+            margin-bottom: 6px;
+            border-radius: 2px;
+        }
+
+        .hamburger-icon span:last-child {
+            margin-bottom:0px;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 10;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        }
+
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #f1f1f1;
+            display: block;
+            transition: 0.3s;
+            user-select: none;
+        }
+
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            color: #f1f1f1;
+        }
+
+        #nav{
+            height: 70px;
+            text-align: left;
+            z-index: 9;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+
+        #kittyandpoohicon{
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+
+
+    {% block content%}
+    {% endblock %}
+</body>
+</html>

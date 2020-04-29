@@ -1,0 +1,604 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+    <div style="text-align: center; margin-top: 100px;">
+        <h5>Most Frequently Used Words</h5>
+        <div style="display: flex;">
+            <div class="pooh-frequent-words-container" style="margin-left: auto; margin-right: auto; height:45vh; width:45vw">
+                <canvas id="pooh-frequent-words"></canvas>
+            </div>
+
+            <div class="kitty-frequent-words-container" style="margin-left: auto; margin-right: auto; height:45vh; width:45vw">
+                <canvas id="kitty-frequent-words"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="message-timeline-container" style="text-align: center; margin: 100px auto 50px auto; position: relative; height:80vh; width:80vw">
+        <h5>Number of Messages Sent By Date</h5>
+        <canvas id="message-timeline"></canvas>
+    </div>
+
+    <div style="text-align: center; margin-top: 100px;">
+        <h5>Most Frequently Used Nicknames</h5>
+        <div style="display: flex;">
+            <div class="pooh-frequent-nicknames-container" style="margin-left: auto; margin-right: auto; height:45vh; width:45vw">
+                <canvas id="pooh-frequent-nicknames"></canvas>
+            </div>
+
+            <div class="kitty-frequent-nicknames-container" style="margin-left: auto; margin-right: auto; height:45vh; width:45vw">
+                <canvas id="kitty-frequent-nicknames"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-day-container" style="text-align: center; margin: 100px auto 450px auto; position: relative; height:30vh; width:80vw">
+        <h5>Number of Messages Sent By Day</h5>
+        <canvas id="day-chart"></canvas>
+    </div>
+
+    <div style="text-align: center; margin-top: 100px; margin-bottom: 100px">
+        <h5>Most Frequently Used Emojis</h5>
+        <div style="display: flex;">
+            <div class="pooh-frequent-emojis-container" style="margin-left: auto; margin-right: auto; height:45vh; width:45vw">
+                <canvas id="pooh-frequent-emojis"></canvas>
+            </div>
+
+            <div class="kitty-frequent-emojis-container" style="margin-left: auto; margin-right: auto; height:45vh; width:45vw">
+                <canvas id="kitty-frequent-emojis"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div id="tagcloud" style="margin: 0 auto 100px auto; width: 80%; text-align: justify">
+        {% for word in Top50Words %}
+            <a href="javascript:void(0);"
+               rel="{{ word.4 }}"
+               data-pooh-count="{{ word.2 }}"
+               data-kitty-count="{{ word.3 }}"
+               data-total-count="{{ word.1 }}"
+               data-html="true"
+               data-toggle="popover"
+               data-placement="top"
+               data-trigger="hover"
+               data-alignment="center"
+            >{{ word.0 }}</a>
+        {% endfor %}
+    </div>
+
+    <div style="text-align: center; margin-left: auto; margin-right: auto; width: 80%;">
+        <div>
+            <br>
+            <h2>Happy Anniversary Kitty!</h2>
+            <br><br>
+            <h5>I hope you enjoyed project Jan Jan! I love you so so much</h5>
+            <h5>If doggy pleased his Mistress, please give doggy a review below</h5>
+            <br>
+        </div>
+        <div id="heart-container">
+            <button id="heart1" type="button" class="heart btn btn-secondary bmd-btn-fab">
+                <i style="font-size: 30px;" class="fa fa-fw fa-heart"></i>
+            </button>
+            <button id="heart2" type="button" class="heart btn btn-secondary bmd-btn-fab">
+                <i style="font-size: 30px;" class="fa fa-fw fa-heart"></i>
+            </button>
+            <button id="heart3" type="button" class="heart btn btn-secondary bmd-btn-fab">
+                <i style="font-size: 30px;" class="fa fa-fw fa-heart"></i>
+            </button>
+            <button id="heart4" type="button" class="heart btn btn-secondary bmd-btn-fab">
+                <i style="font-size: 30px;" class="fa fa-fw fa-heart"></i>
+            </button>
+            <button id="heart5" type="button" class="heart btn btn-secondary bmd-btn-fab">
+                <i style="font-size: 30px;" class="fa fa-fw fa-heart"></i>
+            </button>
+        </div>
+
+        <br><br>
+        <div id="review-submitted">
+            <h5>Thank you Mistress Jasmine. Your rating has been submitted!</h5>
+            <h5>Come back later for more updates on project Jan Jan :)</h5>
+            <br><br>
+        </div>
+    </div>
+
+    <script>
+    console.log({{ Top50Words|safe }})
+        $('[data-toggle="popover"]').each((i) => {
+            let word = $('[data-toggle="popover"]').get(i);
+            console.log($(word))
+            $(word).popover({
+                delay: 100,
+                html: true,
+                content: '<div style="text-align: center"><span>' + word.innerHTML + ' was used <strong>' + word.getAttribute('data-total-count') + '</strong> times</span><canvas id="myChart-' + i + '" width="400" height="400"></canvas></div>',
+            }).on('shown.bs.popover', function () {
+                new Chart($('#myChart-' + i), {
+                    type: 'pie',
+                    data: {
+                        labels: ["Pooh", "Kitty"],
+                        datasets: [{
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                            ],
+                            data: [word.getAttribute('data-pooh-count'), word.getAttribute('data-kitty-count')],
+                        }]
+                    },
+                    options: {}
+                });
+            });
+        });
+
+        $("#tagcloud a").tagcloud({
+            size: {start: 20, end: 36, unit: "px"},
+            color: {start: '#3498DB', end: '#46CFB0'}
+        });
+
+        $( "#heart1" ).mouseenter(function() {
+            $( "#heart1" ).addClass("heart-after");
+        }).mouseleave(function() {
+            $( "#heart1" ).removeClass("heart-after");
+        });
+        $( "#heart2" ).mouseenter(function() {
+            $( "#heart1" ).addClass("heart-after");
+            $( "#heart2" ).addClass("heart-after");
+        }).mouseleave(function() {
+            $( "#heart1" ).removeClass("heart-after");
+            $( "#heart2" ).removeClass("heart-after");
+        });
+        $( "#heart3" ).mouseenter(function() {
+            $( "#heart1" ).addClass("heart-after");
+            $( "#heart2" ).addClass("heart-after");
+            $( "#heart3" ).addClass("heart-after");
+        }).mouseleave(function() {
+            $( "#heart1" ).removeClass("heart-after");
+            $( "#heart2" ).removeClass("heart-after");
+            $( "#heart3" ).removeClass("heart-after");
+        });
+        $( "#heart4" ).mouseenter(function() {
+            $( "#heart1" ).addClass("heart-after");
+            $( "#heart2" ).addClass("heart-after");
+            $( "#heart3" ).addClass("heart-after");
+            $( "#heart4" ).addClass("heart-after");
+        }).mouseleave(function() {
+            $( "#heart1" ).removeClass("heart-after");
+            $( "#heart2" ).removeClass("heart-after");
+            $( "#heart3" ).removeClass("heart-after");
+            $( "#heart4" ).removeClass("heart-after");
+        });
+        $( "#heart5" ).mouseenter(function() {
+            $( "#heart1" ).addClass("heart-after");
+            $( "#heart2" ).addClass("heart-after");
+            $( "#heart3" ).addClass("heart-after");
+            $( "#heart4" ).addClass("heart-after");
+            $( "#heart5" ).addClass("heart-after");
+        }).mouseleave(function() {
+            $( "#heart1" ).removeClass("heart-after");
+            $( "#heart2" ).removeClass("heart-after");
+            $( "#heart3" ).removeClass("heart-after");
+            $( "#heart4" ).removeClass("heart-after");
+            $( "#heart5" ).removeClass("heart-after");
+        });
+
+        $(".heart").click(function(){
+            document.getElementById("heart1").disabled = true;
+            document.getElementById("heart2").disabled = true;
+            document.getElementById("heart3").disabled = true;
+            document.getElementById("heart4").disabled = true;
+            document.getElementById("heart5").disabled = true;
+            document.getElementById("review-submitted").style.display = "block";
+            $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+        });
+
+        var dayChartEl = document.getElementById('day-chart').getContext('2d');
+        var dayChart = new Chart(dayChartEl, {
+            type: 'radar',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                datasets: [{
+                    label: 'Pooh',
+                    data: {{ FergalByDay }},
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                },{
+                    label: 'Kitty',
+                    data: {{ JaniceByDay }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                },{
+                    label: 'Total',
+                    data: {{ TotalByDay }},
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1,
+                }],
+                options: {
+                  title: {
+                    display: true,
+                    text: 'Number of messages sent per day'
+                  }
+                }
+            }
+        });
+
+        var poohFreqCanvas = document.getElementById('pooh-frequent-words').getContext('2d');
+        var poohFreqWords = new Chart(poohFreqCanvas, {
+            type: 'horizontalBar',
+            data: {
+                labels: {{ FergalFreqLabel|safe }},
+                datasets: [{
+                    label: 'Pooh',
+                    data: {{ FergalFreqCount }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgb(255, 158, 227, 0.2)',
+                        'rgb(128, 255, 255, 0.2)',
+                        'rgb(255, 203, 199, 0.2)',
+                        'rgb(184, 219, 98, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgb(195, 105, 170, 1)',
+                        'rgb(0, 197, 204, 1)',
+                        'rgb(203, 154, 150, 1)',
+                        'rgb(134, 169, 50, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            reverse: true,
+                            beginAtZero: true
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        position: 'right',
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var kittyFreqCanvas = document.getElementById('kitty-frequent-words').getContext('2d');
+        var kittyFreqWords = new Chart(kittyFreqCanvas, {
+            type: 'horizontalBar',
+            data: {
+                labels: {{ JaniceFreqLabel|safe }},
+                datasets: [{
+                    label: 'Kitty',
+                    data: {{ JaniceFreqCount }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgb(255, 158, 227, 0.2)',
+                        'rgb(128, 255, 255, 0.2)',
+                        'rgb(255, 203, 199, 0.2)',
+                        'rgb(184, 219, 98, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgb(195, 105, 170, 1)',
+                        'rgb(0, 197, 204, 1)',
+                        'rgb(203, 154, 150, 1)',
+                        'rgb(134, 169, 50, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        var poohFreqNickCanvas = document.getElementById('pooh-frequent-nicknames').getContext('2d');
+        var poohFreqNicknames = new Chart(poohFreqNickCanvas, {
+            type: 'horizontalBar',
+            data: {
+                labels: {{ FergalFreqNickLabel|safe }},
+                datasets: [{
+                    label: 'Pooh',
+                    data: {{ FergalFreqNickCount }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgb(255, 158, 227, 0.2)',
+                        'rgb(128, 255, 255, 0.2)',
+                        'rgb(255, 203, 199, 0.2)',
+                        'rgb(184, 219, 98, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgb(195, 105, 170, 1)',
+                        'rgb(0, 197, 204, 1)',
+                        'rgb(203, 154, 150, 1)',
+                        'rgb(134, 169, 50, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            reverse: true,
+                            beginAtZero: true
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        position: 'right',
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var kittyFreqNickCanvas = document.getElementById('kitty-frequent-nicknames').getContext('2d');
+        var kittyFreqNicknames = new Chart(kittyFreqNickCanvas, {
+            type: 'horizontalBar',
+            data: {
+                labels: {{ JaniceFreqNickLabel|safe }},
+                datasets: [{
+                    label: 'Kitty',
+                    data: {{ JaniceFreqNickCount }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgb(255, 158, 227, 0.2)',
+                        'rgb(128, 255, 255, 0.2)',
+                        'rgb(255, 203, 199, 0.2)',
+                        'rgb(184, 219, 98, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgb(195, 105, 170, 1)',
+                        'rgb(0, 197, 204, 1)',
+                        'rgb(203, 154, 150, 1)',
+                        'rgb(134, 169, 50, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        var poohFreqEmojiCanvas = document.getElementById('pooh-frequent-emojis').getContext('2d');
+        var poohFreqEmoji = new Chart(poohFreqEmojiCanvas, {
+            type: 'horizontalBar',
+            data: {
+                labels: {{ FergalFreqEmojiLabel|safe }},
+                datasets: [{
+                    label: 'Pooh',
+                    data: {{ FergalFreqEmojiCount }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgb(255, 158, 227, 0.2)',
+                        'rgb(128, 255, 255, 0.2)',
+                        'rgb(255, 203, 199, 0.2)',
+                        'rgb(184, 219, 98, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgb(195, 105, 170, 1)',
+                        'rgb(0, 197, 204, 1)',
+                        'rgb(203, 154, 150, 1)',
+                        'rgb(134, 169, 50, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            reverse: true,
+                            beginAtZero: true
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        position: 'right',
+                        ticks: {
+                            beginAtZero: true,
+                            fontSize: 18
+                        }
+                    }]
+                }
+            }
+        });
+
+        var kittyFreqEmojiCanvas = document.getElementById('kitty-frequent-emojis').getContext('2d');
+        var kittyFreqEmoji = new Chart(kittyFreqEmojiCanvas, {
+            type: 'horizontalBar',
+            data: {
+                labels: {{ JaniceFreqEmojiLabel|safe }},
+                datasets: [{
+                    label: 'Kitty',
+                    data: {{ JaniceFreqEmojiCount }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgb(255, 158, 227, 0.2)',
+                        'rgb(128, 255, 255, 0.2)',
+                        'rgb(255, 203, 199, 0.2)',
+                        'rgb(184, 219, 98, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgb(195, 105, 170, 1)',
+                        'rgb(0, 197, 204, 1)',
+                        'rgb(203, 154, 150, 1)',
+                        'rgb(134, 169, 50, 1)'
+                    ],
+                    borderWidth: 1
+                }],
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            fontSize: 18
+                        }
+                    }]
+                }
+            }
+        });
+
+
+        var messageTimelineCanvas = document.getElementById('message-timeline').getContext('2d');
+        var messagesTimeline = new Chart(messageTimelineCanvas, {
+          type: 'line',
+            data: {
+              labels: {{ FergalMessageDate|safe }},
+              datasets: [{
+                label: "Pooh", backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                data: {{ FergalMessageCount }}
+              }, {
+                label: "Kitty",
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                data: {{ JaniceMessageCount }}
+              }, {
+                label: "Total",
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1,
+                data: {{ TotalMessageCount }}
+              }]
+            },
+            options: {
+              scales: {
+                yAxes: [{
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Number of Messages'
+                  }
+                }]
+              }
+            }
+          });
+    </script>
+    <style>
+    #heart-container{
+        display: flex;
+        margin-left: auto;
+        margin-right: auto;
+        width: 30%;
+        justify-content: space-around;
+    }
+
+    #heart1, #heart2, #heart3, #heart4, #heart4, #heart5 {
+        background-color: #cccccc;
+    }
+
+    #heart1.heart-after, #heart2.heart-after, #heart3.heart-after, #heart4.heart-after, #heart5.heart-after{
+        background-color: #f783ac; !important;
+        transition: .5s;
+    }
+
+    #heart1:disabled, #heart2:disabled, #heart3:disabled, #heart4:disabled, #heart4:disabled, #heart5:disabled{
+        opacity: 1;
+    }
+
+    #review-submitted{
+        display: none;
+    }
+
+    @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Firefox < 16 */
+    @-moz-keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Safari, Chrome and Opera > 12.1 */
+    @-webkit-keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Internet Explorer */
+    @-ms-keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Opera < 12.1 */
+    @-o-keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+    </style>
+{% endblock %}
