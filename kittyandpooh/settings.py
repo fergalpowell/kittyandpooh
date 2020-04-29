@@ -25,7 +25,7 @@ SECRET_KEY = '1dt&e=l_mxgvbj-x+yuv%xuzm0a%s$91i5@nf35z+0ldb+7(2%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['fergalp.pythonanywhere.com']
 
 
 # Application definition
